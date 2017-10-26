@@ -1,0 +1,16 @@
+{
+  "name": "chain-server",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "module": "commonjs",
+    "outDir": "dist"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

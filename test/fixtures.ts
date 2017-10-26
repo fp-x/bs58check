@@ -1,5 +1,7 @@
-{
-  "valid": [
+
+
+export var fixtures = {
+  valid: [
     {
       "string": "1AGNa15ZQXAZUgFiqJ2i7Z2DPU2J6hW62i",
       "payload": "0065a16059864a2fdbc7c99a4723a8395bc6f188eb"
@@ -201,7 +203,7 @@
       "payload": "055ece0cadddc415b1980f001785947120acdb36fc"
     }
   ],
-  "invalid": [
+  invalid: [
     "Z9inZq4e2HGQRZQezDjFMmqgUE8NwMRok",
     "3HK7MezAm6qEZQUMPRf8jX7wDv6zig6Ky8",
     "3AW8j12DUk8mgA7kkfZ1BrrzCVFuH1LsXS"
