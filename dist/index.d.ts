@@ -2,6 +2,7 @@
 export declare class Base58Checksum {
     params: any;
     version: any;
+    private_key_version: any;
     checksumPad: Buffer;
     constructor(params?: any);
     ripemd160(msg: any): Buffer;
@@ -14,4 +15,5 @@ export declare class Base58Checksum {
     decode(string: any): any;
     getAddress(privkeypair: any, compressed?: boolean): any;
     getAddressFromHash(hashBuffer: any): any;
+    encodePrivateKey(priv: string | Buffer, compressed?: boolean): any;
 }
