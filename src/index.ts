@@ -9,14 +9,24 @@ import * as crypto from 'crypto';
 export class Base58Checksum {
 
 	version: any = new Buffer([bitcore.Networks.livenet.pubkeyhash]);
+	private_key_version: any = new Buffer([0x80]);
 	checksumPad: Buffer = new Buffer([0,0,0,0]);
 	constructor(public params?) {
 		if(!params) return;
 
+		// private-key-version
+		if(params.private_key_version)
+			this.private_key_version = new Buffer(params.private_key_version, 'hex');
 		if(params.address_pubkeyhash_version)
 			this.version = new Buffer(params.address_pubkeyhash_version, 'hex');
 		if(params.address_checksum_value)
 			this.checksumPad = new Buffer(params.address_checksum_value, 'hex');
+		if(params['private-key-version'])
+			this.private_key_version = new Buffer(params['private-key-version'], 'hex');
+		if(params['address-pubkeyhash-version'])
+			this.version = new Buffer(params['address-pubkeyhash-version'], 'hex');
+		if(params['address-checksum-value'])
+			this.checksumPad = new Buffer(params['address-checksum-value'], 'hex');
 	}
 
 	ripemd160(msg) {
@@ -109,4 +119,27 @@ export class Base58Checksum {
 		return this.encode(versionedBuffer);
 	}
 
+	encodePrivateKey(priv:string|Buffer, compressed=true) {
+		if(typeof(priv) === 'string') {
+			priv = new Buffer(priv, 'hex');
+		}
+		if(compressed) {
+			priv = Buffer.concat([ priv, new Buffer([0x01]) ], priv.length + 1)
+		}
+		let versionArray = [...this.private_key_version];
+		let privArray = [...priv];
+		let spacing = Math.floor(33/versionArray.length);
+		let versionedArray = [];
+		let j = 0;
+		for(var i = 0; i < privArray.length; i++) {
+			if(i === spacing*j && j < versionArray.length) {
+				versionedArray.push(versionArray[j]);
+				j++;
+			}
+			versionedArray.push(privArray[i]);
+		}
+		let versionedBuffer = new Buffer(versionedArray);
+		return this.encode(versionedBuffer);
+	}
 }
+
