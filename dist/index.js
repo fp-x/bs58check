@@ -107,10 +107,8 @@ class Base58Checksum {
         let versionedBuffer = new Buffer(versionedArray);
         return this.encode(versionedBuffer);
     }
-    encodePrivateKey(priv, compressed = true) {
-        if (typeof (priv) === 'string') {
-            priv = new Buffer(priv, 'hex');
-        }
+    encodePrivateKey(privateKey, compressed = true) {
+        let priv = (typeof (privateKey) === 'string') ? new Buffer(privateKey, 'hex') : privateKey;
         if (compressed) {
             priv = Buffer.concat([priv, new Buffer([0x01])], priv.length + 1);
         }
