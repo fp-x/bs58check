@@ -49,7 +49,7 @@ class Base58Checksum {
             checksum[2] ^ this.checksumPad[2],
             checksum[3] ^ this.checksumPad[3],
         ]);
-        console.log('new checksum: ', checksum.toString('hex'));
+        // console.log('new checksum: ', checksum.toString('hex'));
         return base58.encode(Buffer.concat([
             payload,
             checksum
@@ -112,8 +112,29 @@ class Base58Checksum {
         if (compressed) {
             priv = Buffer.concat([priv, new Buffer([0x01])], priv.length + 1);
         }
+        console.log('priv: ' + priv.toString('hex'));
+        console.log('privkeybuf.length: ' + priv.length);
         let versionArray = [...this.private_key_version];
         let privArray = [...priv];
+        let spacing = Math.floor(33 / versionArray.length);
+        let versionedArray = [];
+        let j = 0;
+        for (var i = 0; i < privArray.length; i++) {
+            if (i === spacing * j && j < versionArray.length) {
+                versionedArray.push(versionArray[j]);
+                j++;
+            }
+            versionedArray.push(privArray[i]);
+        }
+        let versionedBuffer = new Buffer(versionedArray);
+        return this.encode(versionedBuffer);
+    }
+    encodePublicKey(pubkeybuf, compressed = true) {
+        // var pubkeybuf = new Buffer(privkeypair.getPublic().encode(16, compressed));
+        console.log('pubkeybuf: ' + pubkeybuf.toString('hex'));
+        console.log('pubkeybuf.length: ' + pubkeybuf.length);
+        let versionArray = [...this.private_key_version];
+        let privArray = [...pubkeybuf];
         let spacing = Math.floor(33 / versionArray.length);
         let versionedArray = [];
         let j = 0;
