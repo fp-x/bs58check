@@ -50,17 +50,20 @@ describe('Private key - Base58Checksum multichain', () => {
 	it("should work for real", () => {
 		const multichainSampleParams = {private_key_version: '809c1407', address_checksum_value: '45971f16'};
 		const bs58 = new Base58Checksum(multichainSampleParams);
+		const privStr = 'c88b948e898d802f6b75ad26e00ecd9e26442e04b1e30d456700b6ba76ca4b45';
 
-		let key = bs58.encodePrivateKey('c88b948e898d802f6b75ad26e00ecd9e26442e04b1e30d456700b6ba76ca4b45');
+		let key = bs58.encodePrivateKey(privStr);
 		console.log('encoded key: '+key);
-		expect(key).not.to.equal('VEEWgYhDhqWnNnDCXXjirJYXGDFPjH1B8v6hmcnj1kLXrkpxArmz7xXw');
+		let rekey = bs58.decodeKey(key).toString('hex');
+		console.log('decoded key: '+rekey);
+		expect(rekey).to.equal(privStr);
 	});
 });
 
 describe('Address Base58Checksum multichain', () => {
 
 
-	it("should reject a non-multichain compatible address", () => {
+	it("should ...", () => {
 		// https://www.multichain.com/developers/address-key-format/
 		const multichainSampleParams = {address_pubkeyhash_version: '0087e099', address_checksum_value: '45971f16'};
 		const bs58 = new Base58Checksum(multichainSampleParams);
@@ -69,12 +72,11 @@ describe('Address Base58Checksum multichain', () => {
 		let address = bs58.getAddressFromHash(hashBuffer);
 		console.log('address: '+address);
 		expect(address).to.be.a('string'); 
+		let rehash = bs58.getHashFromAddress(address).toString('hex');
+		expect(rehash).to.equal(hashBuffer.toString('hex')); 
 	});
-});
-describe('Pubkeyaddr Base58Checksum multichain', () => {
 
-
-	it("should reject a non-multichain compatible address", () => {
+	it("should encode and decode ", () => {
 		// https://www.multichain.com/developers/address-key-format/
 		const multichainSampleParams = {address_pubkeyhash_version: '0087e099', address_checksum_value: '45971f16'};
 		const bs58 = new Base58Checksum(multichainSampleParams);
@@ -86,3 +88,11 @@ describe('Pubkeyaddr Base58Checksum multichain', () => {
 		expect(pubkeyaddr).to.be.a('string'); 
 	});
 });
+describe('Pubkeyaddr Base58Checksum multichain', () => {
+
+
+});
+
+'c88b948e898d802f6b75ad26e00ecd9e26442e04b1e30d456700b6ba76ca4b4501'
+'c88b948e898d809c6b75ad26e00e9e1426442e04b10d45076700b6ba76ca4b4501'
+
