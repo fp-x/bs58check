@@ -5,7 +5,8 @@
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "module": "commonjs",
-    "outDir": "dist"
+    "outDir": "dist",
+    "noUnusedParameters": true
   },
   "include": [
     "src/**/*.ts"

@@ -87,16 +87,11 @@ class Base58Checksum {
         return payload;
     }
     getAddress(privkeypair, compressed = true) {
-        var pubkeybuf = new Buffer(privkeypair.getPublic().encode(16, compressed));
-        var hashBuffer = this.sha256ripemd160(pubkeybuf);
-        return this.getAddressFromHash(hashBuffer);
+        return this.getAddressFromPublicKey(new Buffer(privkeypair.getPublic().encode(16, compressed)));
     }
-    getAddressFromPublicKey(key, compressed = true) {
-        // let pubkeybuf: any = (typeof(key) === 'string')? new Buffer(key, 'hex') : key;
-        // if(compressed) {
-        // 	pubkeybuf = Buffer.concat([ pubkeybuf, new Buffer([0x01]) ], pubkeybuf.length + 1)
-        // }
-        var hashBuffer = this.sha256ripemd160(key);
+    getAddressFromPublicKey(pubkeybuf) {
+        pubkeybuf = (typeof (pubkeybuf) === 'string') ? new Buffer(pubkeybuf, 'hex') : pubkeybuf;
+        var hashBuffer = this.sha256ripemd160(pubkeybuf);
         return this.getAddressFromHash(hashBuffer);
     }
     getAddressFromHash(hashBuffer) {

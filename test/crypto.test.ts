@@ -77,6 +77,16 @@ describe('Address Base58Checksum multichain', () => {
 		expect(address).to.equal('1Yu2BuptuZSiBWfr2Qy4aic6qEVnwPWrdkHPEc');
 	});
 
+	it("should get address from priv", () => {
+		const multichainSampleParams = {address_pubkeyhash_version: '0087e099', address_checksum_value: '45971f16'};
+		const bs58 = new Base58Checksum(multichainSampleParams);
+
+		let priv = secp256k1.keyFromPrivate(knownPrivStr, 'hex')
+
+		let address = bs58.getAddress(priv);
+		expect(address).to.equal('1Z3sVLuWkhR49o19FzSTRBcoRtSHxW2FUuKgDt');
+	});
+
 	it("should get address from hash and vv", () => {
 		// https://www.multichain.com/developers/address-key-format/
 		const multichainSampleParams = {address_pubkeyhash_version: '0087e099', address_checksum_value: '45971f16'};
