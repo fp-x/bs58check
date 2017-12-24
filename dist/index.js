@@ -91,6 +91,14 @@ class Base58Checksum {
         var hashBuffer = this.sha256ripemd160(pubkeybuf);
         return this.getAddressFromHash(hashBuffer);
     }
+    getAddressFromPublicKey(key, compressed = true) {
+        // let pubkeybuf: any = (typeof(key) === 'string')? new Buffer(key, 'hex') : key;
+        // if(compressed) {
+        // 	pubkeybuf = Buffer.concat([ pubkeybuf, new Buffer([0x01]) ], pubkeybuf.length + 1)
+        // }
+        var hashBuffer = this.sha256ripemd160(key);
+        return this.getAddressFromHash(hashBuffer);
+    }
     getAddressFromHash(hashBuffer) {
         let versionArray = [...this.version];
         let hashArray = [...hashBuffer];
@@ -174,8 +182,7 @@ class Base58Checksum {
         let j = 0;
         for (var i = 0; i < versionedArray.length; i++) {
             if (i === (spacing + 1) * j) {
-                if (j >= versionArray.length)
-                    break;
+                // if(j < versionArray.length)
                 version.push(versionedArray[i]);
                 j++;
                 continue;

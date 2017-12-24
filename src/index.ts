@@ -99,6 +99,17 @@ export class Base58Checksum {
 		var hashBuffer = this.sha256ripemd160(pubkeybuf);
 		return this.getAddressFromHash(hashBuffer);
 	}
+
+	getAddressFromPublicKey(key:string|Buffer, compressed=true) {
+		// let pubkeybuf: any = (typeof(key) === 'string')? new Buffer(key, 'hex') : key;
+
+		// if(compressed) {
+		// 	pubkeybuf = Buffer.concat([ pubkeybuf, new Buffer([0x01]) ], pubkeybuf.length + 1)
+		// }
+		var hashBuffer = this.sha256ripemd160(key);
+		return this.getAddressFromHash(hashBuffer);
+	}
+
 	getAddressFromHash(hashBuffer: any) {
 
 		let versionArray = [...this.version];
@@ -188,13 +199,14 @@ export class Base58Checksum {
 		let j = 0;
 		for(var i = 0; i < versionedArray.length; i++) {
 			if(i === (spacing+1)*j) {
-				if(j >= versionArray.length) break;
-				version.push(versionedArray[i])
+				// if(j < versionArray.length)
+					version.push(versionedArray[i])
 				j++;
 				continue;
 			}
 			hashArray.push(versionedArray[i])
 		}
+
 		let versionBuf = new Buffer(version);
 		if(!this.private_key_version.equals(versionBuf)) {
 			throw new Error('Version mismatch: '+this.private_key_version.toString('hex')

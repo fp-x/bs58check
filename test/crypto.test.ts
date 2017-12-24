@@ -7,6 +7,8 @@ import {fixtures} from './fixtures';
 const expect = chai.expect;
 
 import * as bitcore from 'bitcore-lib';
+import * as EC from 'elliptic';
+let secp256k1 = new EC.ec('secp256k1');
 
 const passphrase1 = 'mansion index trip little finish cash expect depart fantasy oven expire manage';
 
@@ -60,39 +62,65 @@ describe('Private key - Base58Checksum multichain', () => {
 	});
 });
 
+
+let knownPrivStr = 'c88b948e898d802f6b75ad26e00ecd9e26442e04b1e30d456700b6ba76ca4b45';
+let knownPublicKey = '03ea3e4710d5c7659d72ca696339dd67f524e8f8fd13d433b38763cde76ca53dd4';
+let knownAddress = '1G94cp2Rvup5LMpz8TGuV8x7yQu4DBytDF4XtU';
 describe('Address Base58Checksum multichain', () => {
+	it("should get address from priv", () => {
+		const multichainSampleParams = {address_pubkeyhash_version: '0087e099', address_checksum_value: '45971f16'};
+		const bs58 = new Base58Checksum(multichainSampleParams);
 
+		let priv = secp256k1.keyFromPrivate('283D01856115B7970B622EAA6DAFF2B9ECE30F1B66927592F6EA70325929102B', 'hex')
 
-	it("should ...", () => {
+		let address = bs58.getAddress(priv);
+		expect(address).to.equal('1Yu2BuptuZSiBWfr2Qy4aic6qEVnwPWrdkHPEc');
+	});
+
+	it("should get address from hash and vv", () => {
 		// https://www.multichain.com/developers/address-key-format/
 		const multichainSampleParams = {address_pubkeyhash_version: '0087e099', address_checksum_value: '45971f16'};
 		const bs58 = new Base58Checksum(multichainSampleParams);
-		let pubkey = new Buffer('03ea3e4710d5c7659d72ca696339dd67f524e8f8fd13d433b38763cde76ca53dd4', 'hex');
+		let pubkey = new Buffer(knownPublicKey, 'hex');
 		let hashBuffer = bs58.sha256ripemd160(pubkey);
 		let address = bs58.getAddressFromHash(hashBuffer);
 		console.log('address: '+address);
 		expect(address).to.be.a('string'); 
+		expect(address).to.equal(knownAddress); 
 		let rehash = bs58.getHashFromAddress(address).toString('hex');
 		expect(rehash).to.equal(hashBuffer.toString('hex')); 
 	});
 
-	it("should encode and decode ", () => {
-		// https://www.multichain.com/developers/address-key-format/
+	it("should encode and decode address from public key", () => {
 		const multichainSampleParams = {address_pubkeyhash_version: '0087e099', address_checksum_value: '45971f16'};
 		const bs58 = new Base58Checksum(multichainSampleParams);
-		// this.priv = secp256k1.keyFromPrivate(priv, 'hex'); // bitcore.PrivateKey(this.priv, NETWORK);			
+		const pubStr = knownPublicKey;
 
-		let pubkey = new Buffer('03ea3e4710d5c7659d72ca696339dd67f524e8f8fd13d433b38763cde76ca53dd4', 'hex');
-		let pubkeyaddr = bs58.encodePublicKey(pubkey);
-		console.log('pubkeyaddr: '+pubkeyaddr);
-		expect(pubkeyaddr).to.be.a('string'); 
+		let address = bs58.getAddressFromPublicKey(pubStr);
+		console.log('address: '+address);
+		expect(address).to.equal(knownAddress); 
+			// expect(rekey).to.equal(pubStr);
+		let hash = bs58.getHashFromAddress(address).toString('hex');
+		console.log('decoded hash: '+hash);
+		// expect(hash).to.equal(pubStr); // HASH
 	});
+
 });
 describe('Pubkeyaddr Base58Checksum multichain', () => {
+	it("should encode and decode public key", () => {
+		const multichainSampleParams = {private_key_version: '809c1407', address_checksum_value: '45971f16'};
+		const bs58 = new Base58Checksum(multichainSampleParams);
+		const pubStr = knownPublicKey;
+
+		let key = bs58.encodePrivateKey(pubStr);
+		console.log('encoded key: '+key);
+		// expect(rekey).to.equal(pubStr);
+		let rekey = bs58.decodeKey(key).toString('hex');
+		console.log('decoded key: '+rekey);
+		expect(rekey).to.equal(pubStr);
+	});
 
 
 });
 
-'c88b948e898d802f6b75ad26e00ecd9e26442e04b1e30d456700b6ba76ca4b4501'
-'c88b948e898d809c6b75ad26e00e9e1426442e04b10d45076700b6ba76ca4b4501'
 
