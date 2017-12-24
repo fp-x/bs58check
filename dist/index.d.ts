@@ -14,7 +14,7 @@ export declare class Base58Checksum {
     decodeUnsafe(string: any): any;
     decode(string: any): any;
     getAddress(privkeypair: any, compressed?: boolean): any;
-    getAddressFromPublicKey(key: string | Buffer, compressed?: boolean): any;
+    getAddressFromPublicKey(pubkeybuf: string | Buffer): any;
     getAddressFromHash(hashBuffer: any): any;
     getHashFromAddress(address: string): Buffer;
     encodePrivateKey(privateKey: string | Buffer, compressed?: boolean): any;

@@ -74,7 +74,7 @@ describe('Address Base58Checksum multichain', () => {
 		let priv = secp256k1.keyFromPrivate('283D01856115B7970B622EAA6DAFF2B9ECE30F1B66927592F6EA70325929102B', 'hex')
 
 		let address = bs58.getAddress(priv);
-		expect(address).to.equal('1Yu2BuptuZSiBWfr2Qy4aic6qEVnwPWrdkHPEc');
+		expect(address).to.equal('1Yu2BuptihmePzC4yH2uv24SFx7HBjQUmi7aGp');
 	});
 
 	it("should get address from priv", () => {

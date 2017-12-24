@@ -196,7 +196,7 @@ export class Base58Checksum {
 			if(i === (spacing+1)*j) {
 				// if(j < versionArray.length)
 					version.push(versionedArray[i])
-				j++;
+				if(j < (versionArray.length-1)) j++;
 				continue;
 			}
 			hashArray.push(versionedArray[i])
@@ -207,7 +207,7 @@ export class Base58Checksum {
 			throw new Error('Version mismatch: '+this.private_key_version.toString('hex')
 				+':'+versionBuf.toString('hex'));
 		}
-		return new Buffer(hashArray);
+		return new Buffer(hashArray).slice(0,-1);
 	}
 }
 
