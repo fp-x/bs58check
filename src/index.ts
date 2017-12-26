@@ -142,8 +142,8 @@ export class Base58Checksum {
 			hashArray.push(versionedArray[i])
 		}
 		let versionBuf = new Buffer(version);
-		console.log('chain: '+this.version.toString('hex'));
-		console.log('read : '+versionBuf.toString('hex'));
+		// console.log('chain: '+this.version.toString('hex'));
+		// console.log('read : '+versionBuf.toString('hex'));
 		if(!this.version.equals(versionBuf)) {
 			throw new Error('Version mismatch: '+this.version.toString('hex')
 				+':'+versionBuf.toString('hex'));
@@ -166,8 +166,8 @@ export class Base58Checksum {
 
 		keybuf = (typeof(keybuf) === 'string')? new Buffer(keybuf, 'hex') : keybuf;
 		// var pubkeybuf = new Buffer(privkeypair.getPublic().encode(16, compressed));
-		console.log('pubkeybuf: '+ keybuf.toString('hex'));
-		console.log('pubkeybuf.length: '+ keybuf.length);
+		// console.log('pubkeybuf: '+ keybuf.toString('hex'));
+		// console.log('pubkeybuf.length: '+ keybuf.length);
 		let versionArray = [...this.private_key_version];
 		let privArray = [...keybuf];
 		let spacing = Math.floor(33/versionArray.length);
@@ -185,7 +185,7 @@ export class Base58Checksum {
 	}
 	decodeKey(keyAddress: string) {
 		let versionedBuffer = this.decode(keyAddress);
-		console.log('vbuf: '+ versionedBuffer.toString('hex'));
+		// console.log('vbuf: '+ versionedBuffer.toString('hex'));
 		let versionedArray = [...versionedBuffer];
 		let versionArray = [...this.private_key_version];
 		let spacing = Math.floor(33/versionArray.length);
