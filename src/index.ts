@@ -97,6 +97,14 @@ export class Base58Checksum {
 	getAddress(privkeypair, compressed: boolean = true) {
 		return this.getAddressFromPublicKey(new Buffer(privkeypair.getPublic().encode(16, compressed)));
 	}
+	isValidAddress(address: string) {
+		try { // TODO test, not catch
+			this.getHashFromAddress(address);
+			return true;
+		} catch(err) {
+			return false;
+		}
+	}
 
 	getAddressFromPublicKey(pubkeybuf:string|Buffer) {
 		pubkeybuf = (typeof(pubkeybuf) === 'string')? new Buffer(pubkeybuf, 'hex') : pubkeybuf;
@@ -126,7 +134,7 @@ export class Base58Checksum {
 	}
 	getHashFromAddress(address: string) {
 		let versionedBuffer = this.decode(address);
-		console.log('versionedBuffer: '+versionedBuffer.toString('hex'));
+		// console.log('versionedBuffer: '+versionedBuffer.toString('hex'));
 		let versionedArray = [...versionedBuffer];
 		let versionArray = [...this.version];
 		let spacing = Math.floor(20/versionArray.length);

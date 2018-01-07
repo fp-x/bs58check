@@ -82,7 +82,7 @@ describe('Address Base58Checksum multichain', () => {
 		const bs58 = new Base58Checksum(multichainSampleParams);
 
 		let priv = secp256k1.keyFromPrivate(knownPrivStr, 'hex')
-
+		console.log('pubkey:', new Buffer(priv.getPublic().encode(16, true)).toString('hex'))
 		let address = bs58.getAddress(priv);
 		expect(address).to.equal('1Z3sVLuWkhR49o19FzSTRBcoRtSHxW2FUuKgDt');
 	});
@@ -128,6 +128,18 @@ describe('Pubkeyaddr Base58Checksum multichain', () => {
 		let rekey = bs58.decodeKey(key).toString('hex');
 		console.log('decoded key: '+rekey);
 		expect(rekey).to.equal(pubStr);
+
+		// let f = (i) => {
+		// 	let b = new Buffer([i]);
+		// 	let multichainSampleParams = {private_key_version: b.toString('hex')+'9c1407', address_checksum_value: '45971f16'};
+		// 	let bs58 = new Base58Checksum(multichainSampleParams);
+		// 	let pubStr = knownPublicKey;
+
+		// 	let key = bs58.encodePrivateKey(pubStr);
+		// 	console.log(`encoded key(${i}): ${key}`);
+
+		// }
+		// for(var i=0; i<256; i++) f(i);
 	});
 
 
